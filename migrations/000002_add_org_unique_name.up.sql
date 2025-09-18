@@ -1,0 +1,1 @@
+ALTER TABLE organisations ADD CONSTRAINT organisations_name_unique UNIQUE (name);

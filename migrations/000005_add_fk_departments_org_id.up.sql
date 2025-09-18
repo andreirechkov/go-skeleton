@@ -1,0 +1,1 @@
+ALTER TABLE departments ADD CONSTRAINT departments_org_fk FOREIGN KEY (organisation_id) REFERENCES organisations(id);

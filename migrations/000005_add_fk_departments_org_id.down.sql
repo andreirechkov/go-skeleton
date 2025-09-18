@@ -1,0 +1,1 @@
+ALTER TABLE departments DROP CONSTRAINT IF EXISTS departments_org_fk;
