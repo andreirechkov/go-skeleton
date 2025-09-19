@@ -3,6 +3,9 @@ export $(shell sed -n 's/^\([A-Za-z0-9_]\+\)=.*/\1/p' .env)
 
 DB_URL=postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@$(POSTGRES_HOST):$(POSTGRES_PORT)/$(POSTGRES_DB)?sslmode=disable
 
+dev:
+	air -c .air.toml
+
 start-app:
 	go run ./cmd/api
 
