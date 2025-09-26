@@ -1,7 +1,17 @@
-include .env
-export $(shell sed -n 's/^\([A-Za-z0-9_]\+\)=.*/\1/p' .env)
+# -------- Options ----------
+ENV_FILE ?= .env
 
-DB_URL=postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@$(POSTGRES_HOST):$(POSTGRES_PORT)/$(POSTGRES_DB)?sslmode=disable
+# -------- Optional .env include (local only) ----------
+ifneq ("$(wildcard $(ENV_FILE))","")
+include $(ENV_FILE)
+export $(shell sed -n 's/^\([A-Za-z0-9_]\+\)=.*/\1/p' $(ENV_FILE))
+endif
+
+# -------- Derived vars ----------
+DB_URL = postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@$(POSTGRES_HOST):$(POSTGRES_PORT)/$(POSTGRES_DB)?sslmode=disable
+
+.PHONY: dev run migrate-up migrate-down migrate-reset migrate-new migrate-force migrate-version migrate-rm-last \
+        build lint fmt imports test tidy lint-ci check check-all
 
 dev:
 	air -c .air.toml
@@ -56,5 +66,4 @@ lint-ci:
 	golangci-lint run ./...
 
 check: fmt imports lint
-
 check-all: fmt imports lint build test tidy
