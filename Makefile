@@ -52,6 +52,9 @@ test:
 tidy:
 	go mod tidy
 
+lint-ci:
+	golangci-lint run ./...
+
 check: fmt imports lint
 
 check-all: fmt imports lint build test tidy
