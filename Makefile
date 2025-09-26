@@ -1,23 +1,24 @@
-# -------- Options ----------
+# -------- Config ----------
 ENV_FILE ?= .env
 
-# -------- Optional .env include (local only) ----------
 ifneq ("$(wildcard $(ENV_FILE))","")
 include $(ENV_FILE)
 export $(shell sed -n 's/^\([A-Za-z0-9_]\+\)=.*/\1/p' $(ENV_FILE))
 endif
 
-# -------- Derived vars ----------
 DB_URL = postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@$(POSTGRES_HOST):$(POSTGRES_PORT)/$(POSTGRES_DB)?sslmode=disable
 
-.PHONY: dev run migrate-up migrate-down migrate-reset migrate-new migrate-force migrate-version migrate-rm-last \
-        build lint fmt imports test tidy lint-ci check check-all
+# -------- Dev / Run ----------
+.PHONY: dev run
 
 dev:
 	air -c .air.toml
 
 run:
 	go run ./cmd/api
+
+# -------- DB Migrations ----------
+.PHONY: migrate-up migrate-down migrate-reset migrate-new migrate-force migrate-version migrate-rm-last
 
 migrate-up:
 	migrate -path migrations -database "$(DB_URL)" up
@@ -44,10 +45,16 @@ migrate-rm-last:
 	files=$$((count*2)); \
 	ls -t migrations | head -n $$files | xargs -I {} rm migrations/{}
 
+# -------- Build / Lint / Test ----------
+.PHONY: build lint lint-ci fmt imports test tidy check check-all
+
 build:
 	go build ./...
 
 lint:
+	golangci-lint run ./...
+
+lint-ci:
 	golangci-lint run ./...
 
 fmt:
@@ -62,8 +69,6 @@ test:
 tidy:
 	go mod tidy
 
-lint-ci:
-	golangci-lint run ./...
-
+# -------- Aggregate Targets ----------
 check: fmt imports lint
 check-all: fmt imports lint build test tidy
