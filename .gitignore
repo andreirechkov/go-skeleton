@@ -31,3 +31,4 @@ Thumbs.db
 # Air / Fresh / Reflex tmp
 tmp/
 .air.toml
+.env
