@@ -1,7 +1,14 @@
+// Package application contains the use-case layer for the organisations module.
 package application
 
-type OrganisationView struct {
-	ID 		string `json:"id"`
-	Name 	string `json:"name"`
-	Desc 	string `json:"description,omitempty"`
+// CreateOrganisationParams defines parameters for creating an organisation.
+type CreateOrganisationParams struct {
+	Name string
+	Desc *string
+}
+
+// UpdateOrganisationParams defines parameters for updating an organisation.
+type UpdateOrganisationParams struct {
+	Name *string
+	Desc *string
 }
