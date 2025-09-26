@@ -1,13 +1,13 @@
+// Package db provides helpers for initializing and working with database connections.
 package db
 
 import (
 	"database/sql"
 	"fmt"
 	"os"
-	
-	_ "github.com/lib/pq"
 )
 
+// NewPostgres initializes and returns a new Postgres database connection.
 func NewPostgres() (*sql.DB, error) {
 	host := os.Getenv("POSTGRES_HOST")
 	port := os.Getenv("POSTGRES_PORT")
@@ -16,8 +16,8 @@ func NewPostgres() (*sql.DB, error) {
 	dbname := os.Getenv("POSTGRES_DB")
 
 	connStr := fmt.Sprintf(
-        "host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
-        host, port, user, pass, dbname,
-    )
-    return sql.Open("postgres", connStr)
+		"host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
+		host, port, user, pass, dbname,
+	)
+	return sql.Open("postgres", connStr)
 }

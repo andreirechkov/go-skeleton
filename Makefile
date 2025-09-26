@@ -6,7 +6,7 @@ DB_URL=postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@$(POSTGRES_HOST):$(POSTG
 dev:
 	air -c .air.toml
 
-start-app:
+run:
 	go run ./cmd/api
 
 migrate-up:
@@ -33,3 +33,28 @@ migrate-rm-last:
 	@if [ -z "$(count)" ]; then count=1; else count=$(count); fi; \
 	files=$$((count*2)); \
 	ls -t migrations | head -n $$files | xargs -I {} rm migrations/{}
+
+build:
+	go build ./...
+
+lint:
+	golangci-lint run ./...
+
+fmt:
+	go fmt ./...
+
+imports:
+	goimports -w .
+
+test:
+	go test ./...
+
+tidy:
+	go mod tidy
+
+lint-ci:
+	golangci-lint run ./...
+
+check: fmt imports lint
+
+check-all: fmt imports lint build test tidy
