@@ -4,9 +4,9 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/joho/godotenv"
-	"github.com/andreirechkov/go-skeleton/internal/shared/db"
 	"github.com/andreirechkov/go-skeleton/internal/modules/organisations/api"
+	"github.com/andreirechkov/go-skeleton/internal/shared/db"
+	"github.com/joho/godotenv"
 )
 
 func main() {
